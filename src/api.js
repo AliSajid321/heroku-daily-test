@@ -4,16 +4,7 @@ const Daily_API_KEY= process.env.REACT_APP_DAILY_API_KEY;
 const bearer = 'Bearer ' + Daily_API_KEY;
 console.log(bearer);
 
-/**
- * Create a short-lived room for demo purposes.
- *
- * It uses the redirect proxy as specified in netlify.toml`
- * This will work locally if you following the Netlify specific instructions
- * in README.md
- *
- * See https://docs.daily.co/reference#create-room for more information on how
- * to use the Daily REST API to create rooms and what options are available. 
- */
+
 async function createRoom() {
 
   const exp = Math.round(Date.now() / 1000) + 60 * 30;
@@ -22,11 +13,11 @@ async function createRoom() {
       exp: exp,
     },
   };
-  let response = await fetch(newRoomEndpoint, {
+  let response = await fetch("https://api.daily.co/v1/rooms", {
     method: "POST",
-    credentials: 'include',
     headers: {
-      'Authorization': bearer,
+      
+      'Authorization': "Bearer f4a863d72689d595c7b749746b2c2c9eb0e671497f4ef671e65c333dfc4863d9",
       'Content-Type': 'application/json'
     },
     body: JSON.stringify(options),
@@ -35,8 +26,6 @@ async function createRoom() {
     room = await response.json();
   return room;
 
-  // Comment out the above and uncomment the below, using your own URL
-  // return { url: "https://your-domain.daily.co/hello" };
 }
 
 export default { createRoom };
