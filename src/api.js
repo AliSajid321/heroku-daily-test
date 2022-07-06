@@ -30,7 +30,7 @@ async function createRoom() {
       'Content-Type': 'application/json'
     },
     body: JSON.stringify(options),
-    mode: 'no-cors',
+    mode: 'cors',
   }),
     room = await response.json();
   return room;
