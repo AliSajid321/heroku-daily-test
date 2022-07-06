@@ -1,5 +1,8 @@
-const newRoomEndpoint =
-  `${window.location.origin}/api/rooms`;
+import React from "react";
+const newRoomEndpoint ="https://api.daily.co/v1/rooms";
+const Daily_API_KEY= process.env.REACT_APP_DAILY_API_KEY;
+const bearer = 'Bearer ' + Daily_API_KEY;
+console.log(bearer);
 
 /**
  * Create a short-lived room for demo purposes.
@@ -21,6 +24,11 @@ async function createRoom() {
   };
   let response = await fetch(newRoomEndpoint, {
     method: "POST",
+    credentials: 'include',
+    headers: {
+      'Authorization': bearer,
+      'Content-Type': 'application/json'
+    },
     body: JSON.stringify(options),
     mode: 'cors',
   }),
