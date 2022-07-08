@@ -13,11 +13,11 @@ async function createRoom() {
       exp: exp,
     },
   };
-  let response = await fetch("https://api.daily.co/v1/rooms", {
+  let response = await fetch(newRoomEndpoint, {
     method: "POST",
     headers: {
       
-      'Authorization': "Bearer f4a863d72689d595c7b749746b2c2c9eb0e671497f4ef671e65c333dfc4863d9",
+      'Authorization': bearer,
       'Content-Type': 'application/json'
     },
     body: JSON.stringify(options),

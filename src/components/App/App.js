@@ -21,7 +21,7 @@ export default function App() {
   const [roomUrl, setRoomUrl] = useState(null);
   const [callObject, setCallObject] = useState(null);
 
-  /**
+  /*
    * Creates a new call room.
    */
   const createCall = useCallback(() => {
@@ -36,14 +36,8 @@ export default function App() {
       });
   }, []);
 
-  /**
+  /*
    * Starts joining an existing call.
-   *
-   * NOTE: In this demo we show how to completely clean up a call with destroy(),
-   * which requires creating a new call object before you can join() again.
-   * This isn't strictly necessary, but is good practice when you know you'll
-   * be done with the call object for a while and you're no longer listening to its
-   * events.
    */
   const startJoiningCall = useCallback((url) => {
     const newCallObject = DailyIframe.createCallObject();
@@ -53,12 +47,12 @@ export default function App() {
     newCallObject.join({ url });
   }, []);
 
-  /**
+  /*
    * Starts leaving the current call.
    */
   const startLeavingCall = useCallback(() => {
     if (!callObject) return;
-    // If we're in the error state, we've already "left", so just clean up
+    
     if (appState === STATE_ERROR) {
       callObject.destroy().then(() => {
         setRoomUrl(null);
@@ -71,8 +65,7 @@ export default function App() {
     }
   }, [callObject, appState]);
 
-  /**
-   * If a room's already specified in the page's URL when the component mounts,
+  /*
    * join the room.
    */
   useEffect(() => {
@@ -82,10 +75,6 @@ export default function App() {
 
   /**
    * Update the page's URL to reflect the active call when roomUrl changes.
-   *
-   * This demo uses replaceState rather than pushState in order to avoid a bit
-   * of state-management complexity. See the comments around enableCallButtons
-   * and enableStartButton for more information.
    */
   useEffect(() => {
     const pageUrl = pageUrlFromRoomUrl(roomUrl);
@@ -102,11 +91,6 @@ export default function App() {
 
   /**
    * Update app state based on reported meeting state changes.
-   *
-   * NOTE: Here we're showing how to completely clean up a call with destroy().
-   * This isn't strictly necessary between join()s, but is good practice when
-   * you know you'll be done with the call object for a while and you're no
-   * longer listening to its events.
    */
   useEffect(() => {
     if (!callObject) return;
@@ -150,7 +134,7 @@ export default function App() {
     };
   }, [callObject]);
 
-  /**
+  /*
    * Listen for app messages from other call participants.
    */
   useEffect(() => {
@@ -172,46 +156,27 @@ export default function App() {
     };
   }, [callObject]);
 
-  /**
-   * Show the call UI if we're either joining, already joined, or are showing
-   * an error.
+  /*
+   * Show the call UI if we're either joining, already joined, or are showing an error.
    */
   const showCall = [STATE_JOINING, STATE_JOINED, STATE_ERROR].includes(
     appState
   );
 
   /**
-   * Only enable the call buttons (camera toggle, leave call, etc.) if we're joined
-   * or if we've errored out.
-   *
-   * !!!
-   * IMPORTANT: calling callObject.destroy() *before* we get the "joined-meeting"
-   * can result in unexpected behavior. Disabling the leave call button
-   * until then avoids this scenario.
-   * !!!
+   * Only enable the call buttons (camera toggle, leave call, etc.) if we're joined or if we've errored out.
    */
   const enableCallButtons = [STATE_JOINED, STATE_ERROR].includes(appState);
 
   /**
-   * Only enable the start button if we're in an idle state (i.e. not creating,
-   * joining, etc.).
-   *
-   * !!!
-   * IMPORTANT: only one call object is meant to be used at a time. Creating a
-   * new call object with DailyIframe.createCallObject() *before* your previous
-   * callObject.destroy() completely finishes can result in unexpected behavior.
-   * Disabling the start button until then avoids that scenario.
-   * !!!
+   * Only enable the start button if we're in an idle state (i.e. not creating, joining, etc.).
    */
   const enableStartButton = appState === STATE_IDLE;
 
   return (
     <div className="app">
       {showCall ? (
-        // NOTE: for an app this size, it's not obvious that using a Context
-        // is the best choice. But for larger apps with deeply-nested components
-        // that want to access call object state and bind event listeners to the
-        // call object, this can be a helpful pattern.
+        
         <CallObjectContext.Provider value={callObject}>
           <Call roomUrl={roomUrl} />
           <Tray
